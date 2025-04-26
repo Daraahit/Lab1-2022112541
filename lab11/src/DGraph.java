@@ -7,7 +7,6 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class DGraph {
     private int vertex;//num of vertex
     private int edge;//num of edge
@@ -556,11 +555,15 @@ public class DGraph {
 					interNode = interNode.next;
 				}*/
         }
-        if(dist[index2] == MAX)
+        // if(flag == false)
+        // {
+        //     Reply = "不可达！";
+        //     return Reply;
+        // }
+        if (dist[index2] == MAX) 
         {
-            Reply = "不可达！";
-            return Reply;
-        }
+            return "不可达！";
+        }        
         Reply = DisplayPath(index1,index2,path);
         String[] WordSplit = Reply.split("@");
         StringBuilder ReplyBuilder = new StringBuilder();
@@ -573,30 +576,30 @@ public class DGraph {
         return ReplyBuilder.toString();
     }
 
-    public String DisplayPath(int start, int end, int[][] path) {
-        if (start == end) {
+    public String DisplayPath(int start,int end,int[][] path)
+    {//求多条最短路径时输出路径  中间@间隔，采用递归，倒叙
+        //start为起始的源点，end为终点，path为二维数组
+        if (start == end)
             return adj[start].getHead().word;
-        }
-    
         StringBuilder builder = new StringBuilder();
-        boolean hasValidPath = false;
-    
-        for (int i = 0; i < vertex; i++) {
-            if (path[end][i] != -1) {
-                String subPath = DisplayPath(start, path[end][i], path);
-                if (!subPath.isEmpty()) {
-                    hasValidPath = true;
-                    String[] segments = subPath.split("@");
-                    for (String seg : segments) {
-                        if (!seg.isEmpty()) {
-                            builder.append(seg).append(" ").append(adj[path[end][i]].getHead().word).append("@");
-                        }
-                    }
+        for(int i = 0 ; i < vertex ; i ++)
+        {
+            if(path[end][i] != -1)
+            {
+                StringBuilder Wordbuilder = new StringBuilder();
+                String MidString = DisplayPath(start,path[end][i],path);
+                String[] PathWords = MidString.split("@"); //按@分开，存储的时候每条路径以@分割
+                for(int j = 0 ;j < PathWords.length;j++)
+                {
+                    if(path[end][i] != start)
+                        PathWords[j] = PathWords[j] +" " +  adj[path[end][i]].getHead().word;
+
+                    Wordbuilder.append(PathWords[j] + "@");
                 }
+                builder.append(Wordbuilder.toString());
             }
         }
-    
-        return hasValidPath ? builder.toString() : "";
+        return builder.toString();
     }
 
     public String[] calcShortestPath(String word1)  //最短路径，Dijkstra算法,只有一个参数
@@ -695,3 +698,6 @@ public class DGraph {
 
     //private static final int infinite = 1000;
 }
+
+
+

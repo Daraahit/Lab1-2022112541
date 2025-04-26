@@ -226,7 +226,7 @@ public class test {
                     //需要判断一下这两个词是不是空的
                 }else if(word1 != null &&word2!= null){
                     resultsShortestPath = graph.calcShortestPath(word1, word2);
-                            // 明确检查不可达的情况
+                    // 明确检查不可达的情况
                     if (resultsShortestPath.equals("不可达！")) {
                         JOptionPane.showMessageDialog(
                         null, 
@@ -234,7 +234,15 @@ public class test {
                         "shortest path", 
                         JOptionPane.INFORMATION_MESSAGE
                     );
-                    } 
+                    }
+                    else if (resultsShortestPath.equals("单词不存在！")) {
+                        JOptionPane.showMessageDialog(
+                        null, 
+                        "单词不存在！", 
+                        "shortest path", 
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                    }
                     else{
                         String srr[] = resultsShortestPath.split("@");
                         showPathes(graph,srr);
