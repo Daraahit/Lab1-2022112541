@@ -41,26 +41,26 @@ public class Blacktest {
  @Test
  public void test0(){
   DGraph graph = new DGraph();
-  readWordsToGraph(graph,"src/empty.txt");
+  readWordsToGraph(graph,"lab11/src/empty.txt");
   System.out.println(graph.calcShortestPath("word1","word2"));
  }
  @Test
  public void test1() {
   DGraph graph = new DGraph();
-  readWordsToGraph(graph,"src/exampleResults.txt");
+  readWordsToGraph(graph,"lab11/src/exampleResults.txt");
   System.out.println(graph.calcShortestPath("to","new"));
 
  }
  @Test
  public void test2() {
   DGraph graph = new DGraph();
-  readWordsToGraph(graph,"src/exampleResults.txt");
+  readWordsToGraph(graph,"lab11/src/exampleResults.txt");
   System.out.println(graph.calcShortestPath("123","456"));
  }
  @Test
  public void test3() {
   DGraph graph = new DGraph();
-  readWordsToGraph(graph,"src/exampleResults.txt");
+  readWordsToGraph(graph,"lab11/src/exampleResults.txt");
   System.out.println(graph.calcShortestPath("civilizations","worlds"));
  }
 }

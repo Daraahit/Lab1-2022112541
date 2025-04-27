@@ -42,7 +42,7 @@ public class Whitetest {
     public void test0(){
         assertTimeout(Duration.ofSeconds(1), () -> {
             DGraph graph = new DGraph();
-            readWordsToGraph(graph,"src/empty.txt");
+            readWordsToGraph(graph,"lab11/src/empty.txt");
             System.out.println(graph.queryBridgeWords("word1","word2"));
         });
 
@@ -51,7 +51,7 @@ public class Whitetest {
     public void test1() {
         assertTimeout(Duration.ofSeconds(1), () -> {
             DGraph graph = new DGraph();
-            readWordsToGraph(graph,"src/exampleResults.txt");
+            readWordsToGraph(graph,"lab11/src/exampleResults.txt");
             System.out.println(graph.queryBridgeWords("to","out"));
         });
 
@@ -61,7 +61,7 @@ public class Whitetest {
     public void test2() {
         assertTimeout(Duration.ofSeconds(1), () -> {
             DGraph graph = new DGraph();
-            readWordsToGraph(graph,"src/exampleResults.txt");
+            readWordsToGraph(graph,"lab11/src/exampleResults.txt");
             System.out.println(graph.queryBridgeWords("123","456"));
         });
 
@@ -70,7 +70,7 @@ public class Whitetest {
     public void test3() {
         assertTimeout(Duration.ofSeconds(1), () -> {
             DGraph graph = new DGraph();
-            readWordsToGraph(graph,"src/exampleResults.txt");
+            readWordsToGraph(graph,"lab11/src/exampleResults.txt");
             System.out.println(graph.queryBridgeWords("to","new"));
         });
 
