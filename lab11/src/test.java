@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -254,25 +255,36 @@ public class test {
         }
         private class PageRankAction implements ActionListener {
             public void actionPerformed(ActionEvent e) {
-                graph.calPageRank(100, 0.85); // 迭代100次，阻尼因子0.85
+                // 使用默认参数：最大迭代次数200，阻尼系数0.85
+                int maxIterations = 200;
+                double dampingFactor = 0.85;
                 
-                String word = JOptionPane.showInputDialog("Enter a word:");
+                // 执行 PageRank 计算
+                graph.calculatePageRanks(maxIterations, dampingFactor);
+                
+                // 输入查询单词
+                String word = JOptionPane.showInputDialog("输入要查询的单词:");
                 if (word != null && !word.trim().isEmpty()) {
-                    Double pr = graph.getPageRank(word.toLowerCase());
+                    Double pr = graph.calPageRank(word.toLowerCase());
                     if (pr != null) {
-                        JOptionPane.showMessageDialog(null, 
-                            String.format("PageRank of '%s' is: %.4f", word, pr),
-                            "PageRank Result", 
-                            JOptionPane.INFORMATION_MESSAGE);
+                        // 显示结果对话框
+                        JOptionPane.showMessageDialog(
+                            null,
+                            String.format("单词 '%s' 的 PageRank 值为: %.4f", word, pr),
+                            "PageRank 结果",
+                            JOptionPane.INFORMATION_MESSAGE
+                        );
                     } else {
-                        JOptionPane.showMessageDialog(null, 
-                            "Word not found!", 
-                            "Error", 
-                            JOptionPane.ERROR_MESSAGE);
-                        }
+                        JOptionPane.showMessageDialog(
+                            null,
+                            "单词 '" + word + "' 不存在于图中!",
+                            "错误",
+                            JOptionPane.ERROR_MESSAGE
+                        );
                     }
                 }
             }
+        }
         
         //随机游走
         private class RandomWalkAction implements ActionListener{

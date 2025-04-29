@@ -213,42 +213,84 @@ public class DGraph {
         }
         return text;
     }
-    public void calPageRank(int maxIterations, double dampingFactor) {
+    public void calculatePageRanks(int maxIterations, double dampingFactor) {
         int n = vertex;
         if (n == 0) return;
-
+    
+        double[] oldPR = new double[MAX];
+        double[] newPR = new double[MAX];
         double initialRank = 1.0 / n;
-        Arrays.fill(pageRanks, initialRank);
-
-        double[] newRanks = new double[MAX];
-        double dampingTerm = (1.0 - dampingFactor) / n;
-
+        Arrays.fill(oldPR, initialRank);
+    
+        double threshold = 1e-6;
+        double d = dampingFactor;
+    
         for (int iter = 0; iter < maxIterations; iter++) {
-        Arrays.fill(newRanks, 0.0);
-
+            Arrays.fill(newPR, 0.0);
+            double zeroOutDegreePR = 0.0;
+    
+            // 收集出度为0的节点的PR总和并传播PR值
             for (int u = 0; u < n; u++) {
-                List<Integer> inNodes = inAdj[u];
-                double sum = 0.0;
-                for (int v : inNodes) {
-                    int outDegree = adj[v].nodeNum;
-                    if (outDegree > 0) {
-                        sum += pageRanks[v] / outDegree;
+                int outDegree = adj[u].nodeNum; // 获取节点u的出度
+                if (outDegree == 0) {
+                    zeroOutDegreePR += oldPR[u];
+                } else {
+                    Node current = adj[u].getHead().next;
+                    while (current != null) {
+                        int v = current.num;
+                        newPR[v] += d * oldPR[u] / outDegree;
+                        current = current.next;
                     }
                 }
-                newRanks[u] = dampingTerm + dampingFactor * sum;
             }
-
-            System.arraycopy(newRanks, 0, pageRanks, 0, n);
+    
+            // 处理出度为0的节点的贡献
+            double deadEndContribution = d * zeroOutDegreePR / n;
+    
+            // 计算每个节点的新PR值（基础项 + 传播值 + 出度为0的贡献）
+            for (int u = 0; u < n; u++) {
+                newPR[u] = (1 - d) / n + newPR[u] + deadEndContribution;
+            }
+    
+            // 检查收敛
+            double diff = 0.0;
+            for (int u = 0; u < n; u++) {
+                diff += Math.abs(newPR[u] - oldPR[u]);
+            }
+            if (diff < threshold) {
+                break;
+            }
+    
+            // 更新PR值为下一次迭代准备
+            System.arraycopy(newPR, 0, oldPR, 0, n);
         }
+    
+        // 将最终结果存入pageRanks数组
+        System.arraycopy(oldPR, 0, pageRanks, 0, n);
     }
 
-    public Double getPageRank(String word) {
+
+    public Double calPageRank(String word) {
+        // 1. 参数检查
+        if (vertex == 0) return null;
+        
+        // 2. 查找单词对应节点
+        int index = -1;
         for (int i = 0; i < vertex; i++) {
             if (adj[i].getHead().word.equalsIgnoreCase(word)) {
-                return pageRanks[i];
+                index = i;
+                break;
             }
         }
-        return null;
+        if (index == -1) return null;
+    
+        // 3. 确保已执行过完整计算（可设置默认参数）
+        if (pageRanks[index] == 0.0) { 
+            calculatePageRanks(100, 0.85); // 按需触发计算
+        }
+    
+        // 4. 返回结果
+        return pageRanks[index];
     }
     public String randomWalk()  //随机游走,随机选择节点开始游走
     {
