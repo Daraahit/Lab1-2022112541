@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+
 
 public class Blacktest {
  public void readWordsToGraph(DGraph graph,String fileName){
@@ -40,27 +42,34 @@ public class Blacktest {
  }
  @Test
  public void test0(){
+  //空文件
   DGraph graph = new DGraph();
-  readWordsToGraph(graph,"lab11/src/empty.txt");
+  readWordsToGraph(graph,"src/empty.txt");
   System.out.println(graph.calcShortestPath("word1","word2"));
+  assertEquals("单词不存在！", graph.calcShortestPath("word1","word2"));
  }
  @Test
  public void test1() {
+  //正常文件多路径
   DGraph graph = new DGraph();
-  readWordsToGraph(graph,"lab11/src/exampleResults.txt");
+  readWordsToGraph(graph,"src/exampleResults.txt");
   System.out.println(graph.calcShortestPath("to","new"));
-
+  assertEquals("to explore strange new@to seek out new@to put out new@", graph.calcShortestPath("to", "new"));
  }
  @Test
  public void test2() {
+  //不存在单词
   DGraph graph = new DGraph();
-  readWordsToGraph(graph,"lab11/src/exampleResults.txt");
+  readWordsToGraph(graph,"src/exampleResults.txt");
   System.out.println(graph.calcShortestPath("123","456"));
+  assertEquals("单词不存在！", graph.calcShortestPath("123","456"));
  }
  @Test
  public void test3() {
+  //正常文件无路径
   DGraph graph = new DGraph();
-  readWordsToGraph(graph,"lab11/src/exampleResults.txt");
-  System.out.println(graph.calcShortestPath("civilizations","worlds"));
+  readWordsToGraph(graph,"src/exampleResults.txt");
+  System.out.println(graph.calcShortestPath("m","out"));
+  assertEquals("不可达！", graph.calcShortestPath("m","out"));
  }
 }
